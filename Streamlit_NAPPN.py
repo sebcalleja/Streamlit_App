@@ -11,7 +11,7 @@ import glob
 import pydeck
 #import meshio
 import streamlit.components.v1 as components
-import open3d as o3d
+#import open3d as o3d
 from pathlib import Path
 import sys
 import plotly.express as px
