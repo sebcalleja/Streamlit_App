@@ -26,6 +26,8 @@ import warnings
 import chart_studio
 import chart_studio.plotly as py
 import plotly.io as pio
+import requests
+import io
 
 ## ------------------------------------- Data Organization Data ---------------------------------
 
@@ -67,15 +69,43 @@ def scatter_plot_lowess_plotly(
         # orientation='v',
         trendline_options=dict(frac=frac),
     )
+
+    return fig
+
+
+def scatter_plot_lowess_plotly_indiv(
+    df,
+    x,
+    y,
+    facet_col,
+    color,
+    title,
+    sort_values,
+    filename,
+    frac=0.1,
+    save=False,
+    marginal_y="histogram",
+):
+
+    fig = px.scatter(
+        df[df["genotype"] == genoIn].sort_values(sort_values),
+        x=x,
+        y=y,
+        facet_col=facet_col,
+        color=color,
+        title=title,
+        trendline="lowess",
+        facet_col_spacing=0.04,
+        width=1100,
+        height=500,
+        # marginal_y=marginal_y,
+        # orientation='v',
+        trendline_options=dict(frac=frac),
+    )
     # fig.update_xaxes(matches='x')
     # fig.data = [t for t in fig.data if t.mode == "lines"]
     # fig.update_traces(showlegend=True) #trendlines have showlegend=False by default
-
-    if save == True:
-        py.plot(fig, filename=filename, auto_open=False)
-        fig.show()
-    else:
-        fig.show()
+    return fig
 
 
 ## Data organization
@@ -89,9 +119,16 @@ def scatter_plot_lowess_plotly(
 
 # df = df[df["treatment"] != "border"]
 
-final_merged_df = pd.read_csv(
-    "https://data.cyverse.org/dav-anon/iplant/projects/phytooracle/season_10_lettuce_yr_2020/level_4/scanner3DTop/season10_rgb_flir_psii_3d.csv"
-)
+# st.cache
+# 3def load_model():
+
+
+# final_merged_df = pd.read_csv("Data/season10_rgb_flir_psii_3d.csv")
+
+url = "https://data.cyverse.org/dav-anon/iplant/projects/phytooracle/season_10_lettuce_yr_2020/level_4/scanner3DTop/season10_rgb_flir_psii_3d_div.csv"
+s = requests.get(url).content
+final_merged_df = pd.read_csv(io.StringIO(s.decode("utf-8")))
+
 final_merged_df["date"] = pd.to_datetime(final_merged_df["date"])
 
 grouped_df = (
@@ -131,7 +168,7 @@ grouped_df["height"] = grouped_df["max_z"] - grouped_df["min_z"]
 # icon makes the icon on the browser tab into a chart emoji
 st.set_page_config(
     page_title="NAPPN Phytooracle Workshop",
-    page_icon="chart_with_upwards_trend",
+    page_icon="https://avatars.githubusercontent.com/u/70173404?s=200&v=4",
     layout="wide",
 )
 
@@ -144,9 +181,6 @@ st.markdown(
     """
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
 <a class="navbar-brand" href="/">
-      <div class="logo-image">
-            <img src="/Volumes/SEB_USB/Season_10/NAPPN/Streamlit/UA.png">
-      </div>
 </a>
   <a class="navbar-brand" href="" target="_blank">NAPPN Phytooracle Workshop</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -161,6 +195,10 @@ st.markdown(
         <a class="nav-link" href="https://github.com/phytooracle/automation/blob/main/README.md/" target="_blank">Documentation</a> 
       </li>
     </ul>
+    <img class="logo-img" src="https://www.colorhexa.com/3498db.png" width="40" height="40">
+    <img class="logo-img" src="https://brand.arizona.edu/sites/default/files/styles/uaqs_medium/public/ua_horiz_rgb_4.png?itok=T7TcQ02k" width="160" height="40">
+    <img class="logo-img" src="https://www.colorhexa.com/3498db.png" width="40" height="40">
+    <img class="logo-img" src="https://avatars.githubusercontent.com/u/70173404?s=200&v=4" width="40" height="40">
   </div>
 </nav>
 """,
@@ -185,72 +223,109 @@ st.markdown(
 # return plantIn, genoIn  # , geno1, geno2, geno3
 
 # st.markdown writes text onto the page
+
 st.markdown("# Phytooracle Products")
 st.markdown("***")
 
 ## Populating the Sidebar
-st.sidebar.image("Pauli_Logo.png", use_column_width=True)
+st.sidebar.image(
+    "https://2mszru2giiozvn5btmb0gsig-wpengine.netdna-ssl.com/wp-content/uploads/2019/12/DU_LogoDesign_Final_Horizontal-min.png",
+    use_column_width=True,
+)
 
 # plantIn, genoIn = season10_menu()
-genoIn = st.sidebar.selectbox("Genotype", (df["genotype"].unique()))
+geno_list = ["Aido", "Iceberg", "Xanadu"]
+
+genoIn = st.sidebar.selectbox("Genotype", geno_list)
+# genoIn = st.sidebar.selectbox("Genotype", (grouped_df["genotype"].unique()))
 
 ## ------------------------- Individual Graph Bounding Area --------------------------------
-st.markdown("")
-st.markdown(f"### {genoIn} RGB")
+# st.markdown("")
+# st.markdown(f"### {genoIn} RGB")
 
-## Make graph
-ind_df = df[df["genotype"] == genoIn]
+# ## Make graph
+# ind_df = grouped_df[grouped_df["genotype"] == genoIn]
 
-fig = px.line(
-    ind_df,
+# fig = px.line(
+#     ind_df,
+#     x="date",
+#     y="bounding_area_m2",
+#     title=f"{genoIn} Bounding Area (m2)",
+#     # width=600,
+#     # height=400,
+# )
+# # fig.add_vline(x=pd.to_datetime(f"{dateIn}"), line_dash="dash", line_color="red")
+
+# ## Add graph to streamlit
+# st.plotly_chart(fig, use_column_width=True)
+
+fig_rgb = scatter_plot_lowess_plotly_indiv(
+    df=grouped_df[
+        grouped_df["bounding_area_m2"].isna() == False
+    ],  # [grouped_df['genotype'].isin(crit)],
     x="date",
     y="bounding_area_m2",
-    title=f"{genoIn} Bounding Area (m2)",
-    # width=600,
-    # height=400,
+    color="genotype",
+    facet_col="treatment",
+    sort_values=["genotype", "treatment"],
+    title="Bounding Area Growth Curves (LOWESS)",
+    filename="s11_plantgrowth_ww_wl_sig_diff_4",
+    #    save=True,
+    frac=1.0,
 )
-# fig.add_vline(x=pd.to_datetime(f"{dateIn}"), line_dash="dash", line_color="red")
-
-## Add graph to streamlit
-st.plotly_chart(fig, use_column_width=True)
+st.plotly_chart(fig_rgb, use_column_width=True)
 
 ## ------------------------- Individual Graph Median Temp --------------------------------
 
-st.markdown(f"### {genoIn} Thermal")
+# st.markdown(f"### {genoIn} Thermal")
 
-## Make graph
-ind_df = df[df["genotype"] == genoIn]
+# ## Make graph
+# ind_df = grouped_df[grouped_df["genotype"] == genoIn]
 
-fig_temp = px.line(
-    ind_df,
+# fig_temp = px.line(
+#     ind_df,
+#     x="date",
+#     y="median",
+#     title=f"{genoIn} Plant Canopy Temperature (Kelvin)",
+#     # width=600,
+#     # height=400,
+# )
+# # fig_temp.add_vline(
+# #     x=pd.to_datetime(f"{dateIn}"), line_dash="dash", line_color="red"
+# # )
+
+# ## Add graph to streamlit
+# st.plotly_chart(fig_temp, use_column_width=True)
+
+fig_temp = scatter_plot_lowess_plotly_indiv(
+    df=grouped_df[
+        grouped_df["median"].isna() == False
+    ],  # [grouped_df['genotype'].isin(crit)],
     x="date",
     y="median",
-    title=f"{genoIn} Plant Canopy Temperature (Kelvin)",
-    # width=600,
-    # height=400,
+    color="genotype",
+    facet_col="treatment",
+    sort_values=["genotype", "treatment"],
+    title="Canopy Temperature Depression",
+    filename="s11_ctd_ww_wl_sig_diff_4",
+    #    save=True,
+    frac=1.0,
 )
-# fig_temp.add_vline(
-#     x=pd.to_datetime(f"{dateIn}"), line_dash="dash", line_color="red"
-# )
-
-## Add graph to streamlit
 st.plotly_chart(fig_temp, use_column_width=True)
 
 ## -------------------------------------- PS2 Graph ----------------------------------------
-# st.markdown("### PS2")
-st.markdown(f"### {genoIn} PS2")
+# # st.markdown("### PS2")
+# st.markdown(f"### {genoIn} PS2")
 
-## Make graph
-ind_df = df[df["genotype"] == genoIn].sort_values(by="date")
+# ## Make graph
+# ind_df = grouped_df[grouped_df["genotype"] == genoIn].sort_values(by="date")
 
-fig_fluor = px.line(ind_df, x="date", y="FV/FM", title=f"{genoIn} Fv/Fm")
+# fig_fluor = px.line(ind_df, x="date", y="FV/FM", title=f"{genoIn} Fv/Fm")
 
-## Add graph to streamlit
-st.plotly_chart(fig_fluor, use_column_width=True)
+# ## Add graph to streamlit
+# st.plotly_chart(fig_fluor, use_column_width=True)
 
-## ---------------------------------- Emmanuel's Plotly Graphs ---------------------------------
-
-scatter_plot_lowess_plotly(
+fig_fluor = scatter_plot_lowess_plotly_indiv(
     df=grouped_df[
         grouped_df["FV/FM"].isna() == False
     ],  # [grouped_df['genotype'].isin(crit)],
@@ -264,39 +339,73 @@ scatter_plot_lowess_plotly(
     #    save=True,
     frac=1.0,
 )
+st.plotly_chart(fig_fluor, use_column_width=True)
 
-# scatter_plot_lowess_plotly(df=grouped_df[grouped_df['bounding_area_m2'].isna()==False],#[grouped_df['genotype'].isin(crit)],
-#                            x='date',
-#                            y='bounding_area_m2',
-#                            color='genotype',
-#                            facet_col='treatment',
-#                            sort_values=['genotype', 'treatment'],
-#                            title='Bounding Area Growth Curves (LOWESS)',
-#                            filename='s11_plantgrowth_ww_wl_sig_diff_4',
-#                         #    save=True,
-#                            frac=1.0)
+## ---------------------------------- Emmanuel's Plotly Graphs ---------------------------------
 
-# scatter_plot_lowess_plotly(df=grouped_df[grouped_df['height'].isna()==False],#[grouped_df['genotype'].isin(crit)],
-#                            x='date',
-#                            y='height',
-#                            color='genotype',
-#                            facet_col='treatment',
-#                            sort_values=['genotype', 'treatment'],
-#                            title='Convex Hull Growth Curves (LOWESS)',
-#                            filename='s11_plantgrowth_3d_ww_wl_sig_diff_4',
-#                         #    save=True,
-#                            frac=1.0)
+plotly_fluor = scatter_plot_lowess_plotly(
+    df=grouped_df[
+        grouped_df["FV/FM"].isna() == False
+    ],  # [grouped_df['genotype'].isin(crit)],
+    x="date",
+    y="FV/FM",
+    color="genotype",
+    facet_col="treatment",
+    sort_values=["genotype", "treatment"],
+    title="Photochemical efficiency of PSII",
+    filename="s11_fvfm_ww_wl_sig_diff_4",
+    #    save=True,
+    frac=1.0,
+)
+st.plotly_chart(plotly_fluor, use_column_width=True)
 
-# scatter_plot_lowess_plotly(df=grouped_df[grouped_df['median'].isna()==False],#[grouped_df['genotype'].isin(crit)],
-#                            x='date',
-#                            y='median',
-#                            color='genotype',
-#                            facet_col='treatment',
-#                            sort_values=['genotype', 'treatment'],
-#                            title='Canopy Temperature Depression',
-#                            filename='s11_ctd_ww_wl_sig_diff_4',
-#                         #    save=True,
-#                            frac=1.0)
+plotly_rgb = scatter_plot_lowess_plotly(
+    df=grouped_df[
+        grouped_df["bounding_area_m2"].isna() == False
+    ],  # [grouped_df['genotype'].isin(crit)],
+    x="date",
+    y="bounding_area_m2",
+    color="genotype",
+    facet_col="treatment",
+    sort_values=["genotype", "treatment"],
+    title="Bounding Area Growth Curves (LOWESS)",
+    filename="s11_plantgrowth_ww_wl_sig_diff_4",
+    #    save=True,
+    frac=1.0,
+)
+st.plotly_chart(plotly_rgb, use_column_width=True)
+
+plotly_height = scatter_plot_lowess_plotly(
+    df=grouped_df[
+        grouped_df["height"].isna() == False
+    ],  # [grouped_df['genotype'].isin(crit)],
+    x="date",
+    y="height",
+    color="genotype",
+    facet_col="treatment",
+    sort_values=["genotype", "treatment"],
+    title="Convex Hull Growth Curves (LOWESS)",
+    filename="s11_plantgrowth_3d_ww_wl_sig_diff_4",
+    #    save=True,
+    frac=1.0,
+)
+st.plotly_chart(plotly_height, use_column_width=True)
+
+plotly_temp = scatter_plot_lowess_plotly(
+    df=grouped_df[
+        grouped_df["median"].isna() == False
+    ],  # [grouped_df['genotype'].isin(crit)],
+    x="date",
+    y="median",
+    color="genotype",
+    facet_col="treatment",
+    sort_values=["genotype", "treatment"],
+    title="Canopy Temperature Depression",
+    filename="s11_ctd_ww_wl_sig_diff_4",
+    #    save=True,
+    frac=1.0,
+)
+st.plotly_chart(plotly_temp, use_column_width=True)
 
 ## ------------------------------- Bottom half of the streamlit app ----------------------------
 
