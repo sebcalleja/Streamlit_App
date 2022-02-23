@@ -9,7 +9,7 @@ import subprocess
 import matplotlib.pyplot as plt
 import glob
 import pydeck
-import meshio
+#import meshio
 import streamlit.components.v1 as components
 import open3d as o3d
 from pathlib import Path
