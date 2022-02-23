@@ -191,7 +191,7 @@ st.markdown(
       <li class="nav-item active">
         <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="https://github.com/phytooracle/automation/blob/main/README.md/" target="_blank" style="color:white;">Documentation</a> 
       </li>
     </ul>
