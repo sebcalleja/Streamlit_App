@@ -1,1 +1,2 @@
 matplot==0.1.9
+plotly==5.4.0
