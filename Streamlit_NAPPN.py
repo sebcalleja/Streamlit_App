@@ -179,7 +179,7 @@ st.markdown(
 )
 st.markdown(
     """
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #6e6e70;">
 <a class="navbar-brand" href="/">
 </a>
   <a class="navbar-brand" href="" style="color:white;">NAPPN Phytooracle Workshop</a>
