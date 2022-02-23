@@ -182,8 +182,8 @@ st.markdown(
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
 <a class="navbar-brand" href="/">
 </a>
-  <a class="navbar-brand" href="" style="color:#33ff33" target="_blank">NAPPN Phytooracle Workshop</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" href="" target="_blank">NAPPN Phytooracle Workshop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" style="color: #FFFFFF" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
