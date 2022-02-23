@@ -192,7 +192,7 @@ st.markdown(
         <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="https://github.com/phytooracle/automation/blob/main/README.md/" target="_blank">Documentation</a> 
+        <a class="nav-link" href="https://github.com/phytooracle/automation/blob/main/README.md/" target="_blank" style="color:white;">Documentation</a> 
       </li>
     </ul>
     <img class="logo-img" src="https://www.colorhexa.com/3498db.png" width="40" height="40">
