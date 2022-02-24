@@ -197,7 +197,7 @@ st.markdown(
     <img class="logo-img" src="https://www.colorhexa.com/6e6e70.png" width="40" height="40">
     <img class="logo-img" src="https://avatars.githubusercontent.com/u/70173404?s=200&v=4" width="40" height="40">
     <img class="logo-img" src="https://www.colorhexa.com/6e6e70.png" width="40" height="40">
-    <img class='logo-img" src="https://learning.cyverse.org/en/latest/_images/cyverse_learning.png" width="180" height="40">
+    <img class='logo-img" src="https://cyverse.org/sites/default/files/inline-images/cyverse_cmyk.png" width="180" height="40">
   </div>
 </nav>
 """,
