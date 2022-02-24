@@ -196,6 +196,8 @@ st.markdown(
     <img class="logo-img" src="https://brand.arizona.edu/sites/default/files/styles/uaqs_medium/public/ua_horiz_rgb_4.png?itok=T7TcQ02k" width="180" height="40">
     <img class="logo-img" src="https://www.colorhexa.com/6e6e70.png" width="40" height="40">
     <img class="logo-img" src="https://avatars.githubusercontent.com/u/70173404?s=200&v=4" width="40" height="40">
+    <img class="logo-img" src="https://www.colorhexa.com/6e6e70.png" width="40" height="40">
+    <img class='logo-img" src="https://learning.cyverse.org/en/latest/_images/cyverse_learning.png" width="180" height="40">
   </div>
 </nav>
 """,
