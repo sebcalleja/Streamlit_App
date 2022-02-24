@@ -189,9 +189,6 @@ st.markdown(
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
         <a class="nav-link" href="https://github.com/phytooracle/automation/blob/main/README.md/" style="color:white;">Documentation</a> 
       </li>
     </ul>
