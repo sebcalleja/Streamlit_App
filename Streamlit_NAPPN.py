@@ -5,13 +5,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import subprocess
-#import seaborn as sns
 import matplotlib.pyplot as plt
 import glob
 import pydeck
-#import meshio
 import streamlit.components.v1 as components
-#import open3d as o3d
 from pathlib import Path
 import sys
 import plotly.express as px
@@ -102,28 +99,9 @@ def scatter_plot_lowess_plotly_indiv(
         # orientation='v',
         trendline_options=dict(frac=frac),
     )
-    # fig.update_xaxes(matches='x')
-    # fig.data = [t for t in fig.data if t.mode == "lines"]
-    # fig.update_traces(showlegend=True) #trendlines have showlegend=False by default
     return fig
 
-
-## Data organization
-
-# df = pd.read_csv("season10_rgb_flir_psii_3d.csv")
-
-# df["date"] = pd.to_datetime(df["date"])
-# df["date"] = [d.date() for d in df["date"]]
-
-# df = df.sort_values(by=["date", "treatment", "genotype"])
-
-# df = df[df["treatment"] != "border"]
-
-# st.cache
-# 3def load_model():
-
-
-# final_merged_df = pd.read_csv("Data/season10_rgb_flir_psii_3d.csv")
+## Data Organization
 
 url = "https://data.cyverse.org/dav-anon/iplant/projects/phytooracle/season_10_lettuce_yr_2020/level_4/scanner3DTop/season10_rgb_flir_psii_3d_div.csv"
 s = requests.get(url).content
@@ -202,23 +180,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-# def season10_menu():
-#     genoIn = st.sidebar.selectbox("Genotype", (df["genotype"].unique()))
-#     plantIn = st.sidebar.selectbox(
-#         "Plant Number",
-#         (
-#             df[df["plant_name"].str.contains(genoIn) == True]["plant_name"]
-#             .sort_values()
-#             .unique()
-#         ),
-#     )
-# geno1 = st.sidebar.checkbox("Iceberg")
-# geno2 = st.sidebar.checkbox("Aido")
-# geno3 = st.sidebar.checkbox("Xanadu")
-
-# return plantIn, genoIn  # , geno1, geno2, geno3
-
 # st.markdown writes text onto the page
 
 st.markdown("# Phytooracle Products")
@@ -230,31 +191,11 @@ st.sidebar.image(
     use_column_width=True,
 )
 
-# plantIn, genoIn = season10_menu()
 geno_list = ["Aido", "Iceberg", "Xanadu"]
 
 genoIn = st.sidebar.selectbox("Genotype", geno_list)
-# genoIn = st.sidebar.selectbox("Genotype", (grouped_df["genotype"].unique()))
 
 ## ------------------------- Individual Graph Bounding Area --------------------------------
-# st.markdown("")
-# st.markdown(f"### {genoIn} RGB")
-
-# ## Make graph
-# ind_df = grouped_df[grouped_df["genotype"] == genoIn]
-
-# fig = px.line(
-#     ind_df,
-#     x="date",
-#     y="bounding_area_m2",
-#     title=f"{genoIn} Bounding Area (m2)",
-#     # width=600,
-#     # height=400,
-# )
-# # fig.add_vline(x=pd.to_datetime(f"{dateIn}"), line_dash="dash", line_color="red")
-
-# ## Add graph to streamlit
-# st.plotly_chart(fig, use_column_width=True)
 
 fig_rgb = scatter_plot_lowess_plotly_indiv(
     df=grouped_df[
@@ -274,26 +215,6 @@ st.plotly_chart(fig_rgb, use_column_width=True)
 
 ## ------------------------- Individual Graph Median Temp --------------------------------
 
-# st.markdown(f"### {genoIn} Thermal")
-
-# ## Make graph
-# ind_df = grouped_df[grouped_df["genotype"] == genoIn]
-
-# fig_temp = px.line(
-#     ind_df,
-#     x="date",
-#     y="median",
-#     title=f"{genoIn} Plant Canopy Temperature (Kelvin)",
-#     # width=600,
-#     # height=400,
-# )
-# # fig_temp.add_vline(
-# #     x=pd.to_datetime(f"{dateIn}"), line_dash="dash", line_color="red"
-# # )
-
-# ## Add graph to streamlit
-# st.plotly_chart(fig_temp, use_column_width=True)
-
 fig_temp = scatter_plot_lowess_plotly_indiv(
     df=grouped_df[
         grouped_df["median"].isna() == False
@@ -311,16 +232,6 @@ fig_temp = scatter_plot_lowess_plotly_indiv(
 st.plotly_chart(fig_temp, use_column_width=True)
 
 ## -------------------------------------- PS2 Graph ----------------------------------------
-# # st.markdown("### PS2")
-# st.markdown(f"### {genoIn} PS2")
-
-# ## Make graph
-# ind_df = grouped_df[grouped_df["genotype"] == genoIn].sort_values(by="date")
-
-# fig_fluor = px.line(ind_df, x="date", y="FV/FM", title=f"{genoIn} Fv/Fm")
-
-# ## Add graph to streamlit
-# st.plotly_chart(fig_fluor, use_column_width=True)
 
 fig_fluor = scatter_plot_lowess_plotly_indiv(
     df=grouped_df[
@@ -404,13 +315,12 @@ plotly_temp = scatter_plot_lowess_plotly(
 )
 st.plotly_chart(plotly_temp, use_column_width=True)
 
-## ------------------------------- Bottom half of the streamlit app ----------------------------
+## _____________________________ Bottom half of the streamlit app ______________________________
 
 ## ----------------------------------- Rotating GIFs (static) ----------------------------------
 
 
 ## New Columns
-# st.markdown(f"## Season Level Data")
 
 col1, col2, col3 = st.columns(3)
 
